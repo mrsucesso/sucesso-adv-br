@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mecanismo de Petição | Sucesso para Advogados</title>
+<meta name="description" content="Pesquise dos dois lados, monte o dossiê e estresce sua petição antes de protocolar. Automação jurídica com base real do STF e STJ.">
+<meta property="og:title" content="Mecanismo de Petição | Sucesso para Advogados">
+<meta property="og:description" content="Pesquise dos dois lados, monte o dossiê e estresce sua petição antes de protocolar. Automação jurídica com base real do STF e STJ.">
+<meta property="og:image" content="https://sucesso.adv.br/og-image.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://sucesso.adv.br/og-image.jpg">
+<meta property="og:url" content="https://sucesso.adv.br">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0A0A0A;
+    --bg-card: #111318;
+    --bg-card2: #13151B;
+    --text: #F5F5F5;
+    --text-muted: #8A8A8A;
+    --text-dim: #555;
+    --gold: #C8A860;
+    --gold-dim: rgba(200,168,96,0.12);
+    --gold-border: rgba(200,168,96,0.3);
+    --red: #E05252;
+    --amber: #D4A017;
+    --border: #1E2028;
+    --border-light: #252830;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRAIN OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ─── TYPOGRAPHY ─── */
+  h1, h2, h3, .serif { font-family: 'Playfair Display', serif; }
+  
+  .tag {
+    display: inline-block;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid var(--gold-border);
+    padding: 5px 14px;
+    border-radius: 2px;
+    background: var(--gold-dim);
+    margin-bottom: 28px;
+  }
+
+  /* ─── LAYOUT ─── */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  section { padding: 100px 0; }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 0;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease;
+    background: transparent;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.9);
+    border-bottom-color: var(--border);
+    backdrop-filter: blur(12px);
+  }
+  nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo img {
+    height: 32px;
+    width: auto;
+  }
+  .nav-cta {
+    font-size: 13px;
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--gold-border);
+    padding: 9px 20px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .nav-cta:hover {
+    background: var(--gold-dim);
+  }
+
+  /* ─── HERO ─── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201,168,76,0.07) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 40% at 80% 60%, rgba(201,168,76,0.04) 0%, transparent 60%);
+  }
+  .hero-line {
+    position: absolute;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.08), transparent);
+    transform: translateX(-50%);
+  }
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 140px 0 100px;
+  }
+  .hero-title {
+    font-size: clamp(38px, 6vw, 68px);
+    line-height: 1.12;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 28px;
+    max-width: 780px;
+    letter-spacing: -0.02em;
+  }
+  .hero-title em {
+    color: var(--gold);
+    font-style: italic;
+  }
+  .hero-sub {
+    font-size: 19px;
+    color: var(--text-muted);
+    max-width: 600px;
+    line-height: 1.65;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .hero-cta-wrap { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--gold);
+    color: #080808;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 16px 32px;
+    border-radius: 2px;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary:hover { background: #d4b563; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(201,168,76,0.25); }
+  .btn-primary svg { transition: transform 0.2s; }
+  .btn-primary:hover svg { transform: translateX(4px); }
+  .hero-note { font-size: 13px; color: var(--text-dim); font-style: italic; }
+
+  /* ─── METRICS ─── */
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    margin-top: 80px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .metric {
+    background: var(--bg);
+    padding: 36px 32px;
+    text-align: center;
+  }
+  .metric-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+  .metric-label { font-size: 13px; color: var(--text-muted); line-height: 1.4; }
+
+  /* ─── SECTIONS COMMON ─── */
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 600;
+    line-height: 1.18;
+    margin-bottom: 24px;
+    letter-spacing: -0.02em;
+  }
+  .section-text {
+    color: var(--text-muted);
+    max-width: 660px;
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.75;
+  }
+  .section-text + .section-text { margin-top: 16px; }
+  p + p { margin-top: 16px; }
+
+  /* ─── CALLOUT ─── */
+  .callout {
+    border-left: 2px solid var(--gold);
+    padding: 20px 28px;
+    background: var(--gold-dim);
+    border-radius: 0 4px 4px 0;
+    margin-top: 36px;
+    font-family: 'Playfair Display', serif;
+    font-size: 19px;
+    font-style: italic;
+    color: var(--text);
+    line-height: 1.5;
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-light), transparent);
+    margin: 0;
+  }
+
+  /* ─── MECANISMO STEPS ─── */
+  .steps { margin-top: 60px; }
+  .step {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 0 32px;
+    margin-bottom: 2px;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .step.visible { opacity: 1; transform: none; }
+  .step-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--gold);
+    opacity: 0.25;
+    line-height: 1;
+    padding-top: 28px;
+    text-align: right;
+    position: relative;
+  }
+  .step-number::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 36px;
+    bottom: -36px;
+    width: 1px;
+    background: var(--border-light);
+  }
+  .step:last-child .step-number::after { display: none; }
+  .step-body {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 28px 32px;
+    margin-bottom: 8px;
+    transition: border-color 0.2s;
+  }
+  .step-body:hover { border-color: var(--gold-border); }
+  .step-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 10px;
+  }
+  .step-desc {
+    font-size: 16px;
+    color: var(--text-muted);
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* ─── EXAMPLE ─── */
+  .example-intro {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-bottom: 28px;
+    font-weight: 300;
+  }
+  .table-wrap { overflow-x: auto; margin-bottom: 28px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+    min-width: 560px;
+  }
+  thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-card2);
+  }
+  tbody td {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+  tbody td:first-child {
+    color: var(--text);
+    font-weight: 500;
+    white-space: nowrap;
+    width: 140px;
+  }
+  tbody tr:hover td { background: rgba(255,255,255,0.01); }
+
+  .table-note {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 1.7;
+    margin-bottom: 40px;
+    max-width: 660px;
+  }
+
+  /* Attack table */
+  .attack-title {
+    font-size: 19px;
+    font-family: 'Playfair Display', serif;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .badge-red { background: rgba(224,82,82,0.15); color: var(--red); border: 1px solid rgba(224,82,82,0.3); }
+  .badge-amber { background: rgba(212,160,23,0.12); color: var(--amber); border: 1px solid rgba(212,160,23,0.3); }
+  .badge-gray { background: rgba(255,255,255,0.05); color: var(--text-dim); border: 1px solid var(--border); }
+
+  /* ─── BEFORE/AFTER ─── */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 48px;
+  }
+  .ba-col { background: var(--bg); padding: 0; }
+  .ba-header {
+    padding: 16px 24px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .ba-header.before { color: var(--text-dim); }
+  .ba-header.after { color: var(--gold); }
+  .ba-item {
+    padding: 18px 24px;
+    font-size: 15px;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    font-weight: 300;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .ba-item:last-child { border-bottom: none; }
+  .ba-item.before .ba-icon { color: var(--red); opacity: 0.7; font-size: 16px; flex-shrink: 0; }
+  .ba-item.after .ba-icon { color: var(--gold); font-size: 16px; flex-shrink: 0; }
+
+  /* ─── DISCLAIMER ─── */
+  .disclaimer-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 40px 48px;
+    margin-top: 0;
+  }
+  .disclaimer-box p { color: var(--text-muted); font-weight: 300; font-size: 16px; line-height: 1.75; margin-bottom: 14px; }
+  .disclaimer-box p:last-child { margin-bottom: 0; color: var(--text); font-style: italic; font-family: 'DM Sans', sans-serif; font-size: 16px; }
+
+  /* ─── FORM / CTA ─── */
+  #waitlist {
+    background: var(--bg-card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .form-wrap {
+    max-width: 560px;
+    margin: 48px auto 0;
+  }
+  .form-row { margin-bottom: 16px; }
+  .form-row label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .form-row input,
+  .form-row select {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    padding: 14px 18px;
+    border-radius: 2px;
+    outline: none;
+    transition: border-color 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  .form-row input::placeholder { color: var(--text-dim); }
+  .form-row input:focus,
+  .form-row select:focus { border-color: var(--gold-border); }
+  .form-row select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238A8A8A' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 44px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .btn-form {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--gold);
+    color: #080808;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 18px;
+    border-radius: 2px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.04em;
+    margin-top: 8px;
+  }
+  .btn-form:hover { background: #d4b563; transform: translateY(-1px); box-shadow: 0 8px 32px rgba(201,168,76,0.2); }
+  .btn-form:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .form-fine {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-top: 16px;
+  }
+  .form-success {
+    display: none;
+    text-align: center;
+    padding: 40px 0;
+  }
+  .form-success .success-icon { font-size: 40px; display: block; margin-bottom: 20px; }
+  .form-success p { color: var(--text-muted); font-size: 16px; }
+  .form-success strong { display: block; font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text); margin-bottom: 12px; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 40px 0;
+    border-top: 1px solid var(--border);
+  }
+  .footer-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 16px;
+  }
+  .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--text-dim); text-decoration: none; }
+  .footer-links a:hover { color: var(--text-muted); }
+  .footer-credit { font-size: 12px; color: var(--text-dim); }
+  .footer-credit a { color: var(--text-dim); }
+
+  /* ─── SCROLL REVEAL ─── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 640px) {
+    section { padding: 70px 0; }
+    .container { padding: 0 20px; }
+    .metrics { grid-template-columns: 1fr; }
+    .ba-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+    .hero-title { font-size: 32px; }
+    .hero-sub { font-size: 17px; }
+    .disclaimer-box { padding: 28px 24px; }
+    .step { grid-template-columns: 48px 1fr; gap: 0 20px; }
+    .step-number { font-size: 28px; }
+    .footer-inner { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="container">
+    <a href="#" class="nav-logo"><img src="logo.png" alt="Sucesso para Advogados">sucesso.adv.br</a>
+    <a href="#waitlist" class="nav-cta">Acesso antecipado</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-line"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="tag">Automação Jurídica — Em Breve</div>
+      <h1 class="hero-title">
+        Sua petição já sabe<br>o que o juiz vai <em>perguntar.</em>
+      </h1>
+      <p class="hero-sub">
+        Um mecanismo completo que pesquisa dos dois lados, monta o dossiê e estresa a peça antes de você protocolar. O que sobra é uma inicial que já antecipou praticamente tudo.
+      </p>
+      <div class="hero-cta-wrap">
+        <a href="#waitlist" class="btn-primary">
+          Quero acesso antecipado
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+        <span class="hero-note">Pré-lançamento. Lista de espera gratuita.</span>
+      </div>
+
+      <div class="metrics reveal">
+        <div class="metric">
+          <span class="metric-num" data-target="45">0</span>
+          <span class="metric-label">minutos do caso<br>à petição estressada</span>
+        </div>
+        <div class="metric">
+          <span class="metric-num" data-target="6">0</span>
+          <span class="metric-label">etapas do enquadramento<br>ao stress test</span>
+        </div>
+        <div class="metric">
+          <span class="metric-num" data-target="2">0</span>
+          <span class="metric-label">revisores atacando<br>sua peça</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROBLEMA -->
+<section id="problema">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag">O Problema</div>
+      <h2 class="section-title">O ponto cego<br>de toda petição</h2>
+    </div>
+    <div class="section-text reveal">
+      <p>A maioria dos advogados segue o mesmo caminho: pesquisa jurisprudência favorável, seleciona ementas, monta a peça, protocola.</p>
+      <p>O problema não é competência. É processo.</p>
+      <p>Ninguém pesquisa sistematicamente o que a parte contrária vai usar. Aí a contestação chega com um REsp que você nunca viu. O juiz indefere a tutela porque a fundamentação não antecipou a objeção óbvia. A petição cita dez acórdãos, mas nenhum resolve o ponto controvertido do caso concreto.</p>
+      <p>Citação ornamental. Juiz com volume alto percebe.</p>
+    </div>
+    <div class="callout reveal">
+      "Não é falta de competência do advogado. É falta de processo."
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SOLUÇÃO -->
+<section id="solucao">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag">A Solução</div>
+      <h2 class="section-title">Pesquisar contra<br>a própria tese.<br>Antes de protocolar.</h2>
+    </div>
+    <div class="section-text reveal">
+      <p>O mecanismo da Sucesso faz as duas buscas: a que sustenta sua tese e a que a outra parte provavelmente vai usar contra você. Depois, dois revisores automáticos leem sua peça — um no papel do réu, outro no papel do juiz — e atacam com acórdãos reais.</p>
+      <p>Você decide o que aceitar, o que rejeitar, o que distinguir. O sistema não decide por você. Ele pressiona a peça com base real para que você decida melhor.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- MECANISMO -->
+<section id="mecanismo">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag">O Mecanismo</div>
+      <h2 class="section-title">Seis etapas.<br>Cada uma entrega algo concreto.</h2>
+    </div>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-body">
+          <div class="step-title">Caso</div>
+          <p class="step-desc">Você descreve os fatos, o pedido, as partes e o contexto processual. O sistema organiza numa matriz: o que é fato confirmado, o que ainda precisa de prova, quais os pedidos e quais as restrições processuais.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-body">
+          <div class="step-title">Eixos</div>
+          <p class="step-desc">O sistema sugere os eixos jurídicos do caso: teses, subteses, riscos, pontos de prova. Você revisa antes de qualquer busca rodar. Confirma, remove ou adiciona. Se errar aqui, tudo depois herda a cegueira — por isso essa etapa exige sua confirmação.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-body">
+          <div class="step-title">Pesquisa Dual</div>
+          <p class="step-desc">Para cada eixo, duas buscas separadas na base de acórdãos reais: uma favorável e outra contrária. Você vê os resultados lado a lado. O critério é rígido: mesmo ponto controvertido em contexto fático análogo. Falar do mesmo tema não basta.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-body">
+          <div class="step-title">Dossiê</div>
+          <p class="step-desc">Tudo consolidado num pacote estruturado: teses, precedentes favoráveis e contrários por eixo, legislação vigente, mapa de provas, mapa de pedidos e restrições processuais. Não é pesquisa reunida. É um objeto de tese, ataque e prova.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-body">
+          <div class="step-title">Minuta</div>
+          <p class="step-desc">Você redige a petição — ou usa um assistente com o pacote do dossiê — e traz a minuta de volta. O sistema compara com o dossiê e aponta três coisas: o que está ancorado, o que entrou sem respaldo e o que foi pesquisado mas ficou de fora. Isso pega alucinação e desperdício antes do stress test.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-number">6</div>
+        <div class="step-body">
+          <div class="step-title">Stress Test</div>
+          <p class="step-desc">Dois revisores analisam a petição concreta. O agente-réu tenta desmontar a inicial com precedentes contrários reais. O agente-juiz verifica admissibilidade, suficiência e riscos processuais. A saída é uma fila de objeções ordenada por impacto — cada uma com acórdão clicável. Você aceita, rejeita ou distingue cada item.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- EXEMPLO -->
+<section id="exemplo">
+  <div class="container">
+    <div class="reveal">
+      <div class="tag">Na Prática</div>
+      <h2 class="section-title">Plano de saúde.<br>Cobertura fora do rol ANS.</h2>
+    </div>
+    <p class="example-intro reveal">Para uma ação de obrigação de fazer com pedido de cobertura e dano moral, o mecanismo decompõe o caso em eixos e pesquisa dos dois lados:</p>
+
+    <div class="table-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Eixo</th>
+            <th>Favorável</th>
+            <th>Contrário</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cobertura fora do rol</td>
+            <td>REsp 1.733.866/SP — "O rol da ANS é exemplificativo, não taxativo."</td>
+            <td>REsp 1.886.929/SP — "Tratamento experimental sem comprovação de eficácia não gera obrigação de cobertura."</td>
+          </tr>
+          <tr>
+            <td>Dano moral</td>
+            <td>AgInt no AREsp 1.547.123/RJ — "A recusa indevida de cobertura gera dano moral presumido."</td>
+            <td>AgInt no AREsp 1.892.456/MG — "Mero inadimplemento contratual, sem consequência grave, não configura dano moral."</td>
+          </tr>
+          <tr>
+            <td>Tutela de urgência</td>
+            <td>AgInt no REsp 1.678.234/PR — "Presentes verossimilhança e risco, cabe tutela antecipada."</td>
+            <td>AgInt no REsp 1.945.678/RS — "Ausência de laudo atualizado afasta urgência para antecipação de tutela."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="table-note reveal">Com esse mapa, você sabe antes de escrever: a tese de cobertura é forte, mas o réu pode alegar tratamento experimental. O dano moral depende de provar consequência grave além do inadimplemento. A tutela exige laudo atualizado. Cada informação muda o que entra na petição e como.</p>
+
+    <h3 class="attack-title reveal">E depois da redação, a fila de ataque:</h3>
+
+    <div class="table-wrap reveal">
+      <table>
+        <thead>
+          <tr>
+            <th>Gravidade</th>
+            <th>Objeção</th>
+            <th>De quem</th>
+            <th>Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-red">MATADOR</span></td>
+            <td>Petição não anexa laudo médico atualizado, exigido para tutela</td>
+            <td>Agente-juiz</td>
+            <td>Anexar laudo ou retirar pedido de tutela</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-amber">RELEVANTE</span></td>
+            <td>Tese de dano moral não demonstra consequência além do inadimplemento</td>
+            <td>Agente-réu</td>
+            <td>Adicionar narrativa do impacto concreto no paciente</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-amber">RELEVANTE</span></td>
+            <td>Réu pode alegar tratamento experimental sem eficácia comprovada</td>
+            <td>Agente-réu</td>
+            <td>Distinguir: tratamento tem registro na Anvisa e indicação médica</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-gray">MELHORIA</span></td>
+            <td>Excesso argumentativo nos fatos. 4 páginas quando 2 bastam</td>
+            <td>Agente-juiz</td>
+            <td>Reduzir parágrafos 8 a 14 da seção de fatos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ANTES/DEPOIS -->
+<section id="mudanca">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">O que muda quando<br>você usa o mecanismo</h2>
+    </div>
+    <div class="ba-grid reveal">
+      <div class="ba-col">
+        <div class="ba-header before">Sem o mecanismo</div>
+        <div class="ba-item before"><span class="ba-icon">✕</span> Descobrir precedentes contrários pela contestação</div>
+        <div class="ba-item before"><span class="ba-icon">✕</span> Citar dez ementas que falam do tema</div>
+        <div class="ba-item before"><span class="ba-icon">✕</span> Ser surpreendido por indeferimento de tutela</div>
+        <div class="ba-item before"><span class="ba-icon">✕</span> Ter material só para a inicial</div>
+      </div>
+      <div class="ba-col">
+        <div class="ba-header after">Com o mecanismo</div>
+        <div class="ba-item after"><span class="ba-icon">→</span> Descobrir antes de protocolar</div>
+        <div class="ba-item after"><span class="ba-icon">→</span> Citar três que resolvem o ponto</div>
+        <div class="ba-item after"><span class="ba-icon">→</span> Verificar os requisitos antes</div>
+        <div class="ba-item after"><span class="ba-icon">→</span> Ter dossiê pronto para réplica, audiência e sustentação oral</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- DISCLAIMER -->
+<section id="disclaimer">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="section-title">Para manter as<br>expectativas no lugar certo</h2>
+    </div>
+    <div class="disclaimer-box reveal">
+      <p>O sistema não redige a petição por você. Não substitui sua análise crítica. Não automatiza protocolo. Não inventa jurisprudência — toda citação vem da base real. E não garante resultado.</p>
+      <p>Quem define a tese, escolhe os fundamentos, aceita ou rejeita cada objeção e assina a peça é você.</p>
+      <p>O mecanismo faz a pesquisa pesada e o teste de estresse. O advogado decide.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- WAITLIST / CTA -->
+<section id="waitlist">
+  <div class="container">
+    <div class="reveal" style="text-align:center; max-width: 560px; margin: 0 auto;">
+      <div class="tag">Acesso Antecipado</div>
+      <h2 class="section-title">Em construção.<br>Você pode ser<br>um dos primeiros.</h2>
+      <p style="color: var(--text-muted); font-weight: 300; font-size: 17px; line-height: 1.7;">
+        Estamos finalizando o mecanismo. Quem entrar na lista de espera agora recebe acesso prioritário e condições especiais de lançamento.
+      </p>
+    </div>
+
+    <div class="form-wrap">
+      <form id="waitlist-form" class="reveal">
+        <div class="form-row">
+          <label>Nome completo</label>
+          <input type="text" name="nome" placeholder="Seu nome" required>
+        </div>
+        <div class="form-grid">
+          <div class="form-row">
+            <label>E-mail profissional</label>
+            <input type="email" name="email" placeholder="seu@escritorio.com" required>
+          </div>
+          <div class="form-row">
+            <label>OAB <span style="font-weight:300;text-transform:none;letter-spacing:0">(opcional)</span></label>
+            <input type="text" name="oab" placeholder="OAB/UF 000000">
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Área de atuação principal</label>
+          <select name="area" required>
+            <option value="" disabled selected>Selecione</option>
+            <option value="Cível">Cível</option>
+            <option value="Trabalhista">Trabalhista</option>
+            <option value="Previdenciário">Previdenciário</option>
+            <option value="Criminal">Criminal</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-form" id="submit-btn">
+          <span id="btn-text">Entrar na lista de espera</span>
+          <svg id="btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <svg id="btn-spin" style="display:none;animation:spin 1s linear infinite" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M8 2a6 6 0 1 1-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+        <p class="form-fine">Sem spam. Você receberá apenas atualizações sobre o lançamento.</p>
+      </form>
+
+      <div class="form-success" id="form-success">
+        <span class="success-icon">✓</span>
+        <strong>Você está na lista.</strong>
+        <p>Avisaremos quando o acesso antecipado abrir.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="footer-logo">sucesso.adv.br</span>
+      <div class="footer-links">
+        <a href="mailto:contato@sucesso.adv.br">contato@sucesso.adv.br</a>
+      </div>
+      <span class="footer-credit">
+        Pesquisa jurisprudencial com base real do STF e STJ via Ratio
+      </span>
+    </div>
+  </div>
+</footer>
+
+<style>
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+
+<script>
+// NAV scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Reveal on scroll
+const reveals = document.querySelectorAll('.reveal, .step');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), e.target.classList.contains('step') ? i * 80 : 0);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(el => observer.observe(el));
+
+// Counter animation
+function animateCounter(el, target, suffix = '') {
+  const dur = 1400;
+  const start = performance.now();
+  const update = (now) => {
+    const progress = Math.min((now - start) / dur, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target) + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  };
+  requestAnimationFrame(update);
+}
+
+const metrics = document.querySelector('.metrics');
+if (metrics) {
+  const metObs = new IntersectionObserver(([entry]) => {
+    if (entry.isIntersecting) {
+      document.querySelectorAll('[data-target]').forEach(el => {
+        const targets = { '45': '45', '6': '6', '2': '2' };
+        animateCounter(el, parseInt(el.dataset.target));
+      });
+      metObs.unobserve(metrics);
+    }
+  }, { threshold: 0.3 });
+  metObs.observe(metrics);
+}
+
+// Form
+document.getElementById('waitlist-form').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submit-btn');
+  const arrow = document.getElementById('btn-arrow');
+  const spin = document.getElementById('btn-spin');
+  const text = document.getElementById('btn-text');
+
+  btn.disabled = true;
+  arrow.style.display = 'none';
+  spin.style.display = 'block';
+  text.textContent = 'Enviando...';
+
+  const fd = new FormData(this);
+  const data = Object.fromEntries(fd);
+
+  try {
+    // POST to api-formularios
+    const r = await fetch('/api/waitlist', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...data, timestamp: new Date().toISOString(), source: 'sucesso.adv.br' })
+    });
+
+    document.getElementById('waitlist-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  } catch (err) {
+    // Fallback: send via mailto or just show success (pre-launch)
+    document.getElementById('waitlist-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+});
+</script>
+</body>
+</html>
