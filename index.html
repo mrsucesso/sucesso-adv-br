@@ -213,6 +213,23 @@ header{
 }
 .mod-out b{color:#4a3608}
 
+/* ---------- CÉREBRO ---------- */
+.brain{background:#fff}
+.brain-box{
+ background:radial-gradient(600px 320px at 85% 0%, rgba(233,191,99,.16), transparent 62%), var(--navy);
+ border:1px solid var(--line-dark);border-radius:18px;
+ padding:48px 50px;color:#fff;position:relative;overflow:hidden;
+}
+.brain-box h2{color:#fff}
+.brain-box h2 em{font-style:normal;color:var(--gold-lt)}
+.brain-box .lead{color:#A9BAD2;font-size:19px;max-width:700px}
+.brain-box p.comp{color:#B8C7DC;font-size:16.5px;max-width:700px}
+.brain-list{list-style:none;margin-top:20px;max-width:660px}
+.brain-list li{padding:10px 0 10px 30px;position:relative;font-size:16px;color:#D6E1F0;border-bottom:1px solid rgba(35,64,110,.6)}
+.brain-list li:last-child{border-bottom:0}
+.brain-list li::before{content:"\2713";position:absolute;left:0;color:var(--gold-lt);font-weight:700}
+@media(max-width:900px){.brain-box{padding:32px 26px}}
+
 /* ---------- FERRAMENTAS ---------- */
 .tools{background:var(--navy-soft)}
 .tool-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
@@ -512,6 +529,23 @@ footer{background:#04122A;color:#7E90AB;padding:40px 0;font-size:14px}
       </div>
     </div>
   </div>
+</section>
+
+<!-- ================= CÉREBRO ================= -->
+<section class="brain" id="cerebro">
+ <div class="wrap">
+ <div class="brain-box">
+ <span class="eyebrow">A peça que amarra tudo</span>
+ <h2>Aprenda a criar um <em>cérebro</em>.</h2>
+ <p class="lead">Um cérebro que guarda as suas preferências e o histórico do seu trabalho, lê centenas de documentos e filtra tudo de forma simples — sempre ao alcance de um clique.</p>
+ <p class="comp">Cada padrão seu, cada decisão, cada documento importante passa a morar num lugar só — que a IA consulta antes de responder. Você para de repetir contexto toda segunda-feira. É a diferença entre usar IA como chat solto e ter uma equipe que nunca esquece nada.</p>
+ <ul class="brain-list">
+ <li>Suas preferências e o histórico do seu trabalho, sempre vivos</li>
+ <li>Lê centenas de documentos e filtra de forma simples</li>
+ <li>Tudo ao alcance de um clique — para você e para a IA</li>
+ </ul>
+ </div>
+ </div>
 </section>
 
 <!-- ================= FERRAMENTAS ================= -->
