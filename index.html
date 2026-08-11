@@ -228,7 +228,9 @@ header{
 .brain-list li{padding:10px 0 10px 30px;position:relative;font-size:16px;color:#D6E1F0;border-bottom:1px solid rgba(35,64,110,.6)}
 .brain-list li:last-child{border-bottom:0}
 .brain-list li::before{content:"\2713";position:absolute;left:0;color:var(--gold-lt);font-weight:700}
-@media(max-width:900px){.brain-box{padding:32px 26px}}
+.brain-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
+.brain-img img{width:100%;border-radius:12px;display:block}
+@media(max-width:900px){.brain-box{padding:32px 26px}.brain-grid{grid-template-columns:1fr;gap:28px}.brain-img{order:-1}.brain-img img{max-width:360px;margin:0 auto}}
 
 /* ---------- FERRAMENTAS ---------- */
 .tools{background:var(--navy-soft)}
@@ -535,6 +537,8 @@ footer{background:#04122A;color:#7E90AB;padding:40px 0;font-size:14px}
 <section class="brain" id="cerebro">
  <div class="wrap">
  <div class="brain-box">
+ <div class="brain-grid">
+ <div>
  <span class="eyebrow">A peça que amarra tudo</span>
  <h2>Aprenda a criar um <em>cérebro</em>.</h2>
  <p class="lead">Um cérebro que guarda as suas preferências e o histórico do seu trabalho, lê centenas de documentos e filtra tudo de forma simples, sempre ao alcance de um clique.</p>
@@ -544,6 +548,11 @@ footer{background:#04122A;color:#7E90AB;padding:40px 0;font-size:14px}
  <li>Lê centenas de documentos e filtra de forma simples</li>
  <li>Tudo ao alcance de um clique, para você e para a IA</li>
  </ul>
+ </div>
+ <div class="brain-img">
+ <img src="cerebro.jpg" alt="Cérebro digital: preferências, histórico e documentos ao alcance de um clique" loading="lazy">
+ </div>
+ </div>
  </div>
  </div>
 </section>
