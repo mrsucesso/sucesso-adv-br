@@ -216,7 +216,7 @@ header{
 /* ---------- CÉREBRO ---------- */
 .brain{background:#fff}
 .brain-box{
- background:radial-gradient(600px 320px at 85% 0%, rgba(233,191,99,.16), transparent 62%), var(--navy);
+ background:var(--navy);
  border:1px solid var(--line-dark);border-radius:18px;
  padding:48px 50px;color:#fff;position:relative;overflow:hidden;
 }
@@ -229,7 +229,7 @@ header{
 .brain-list li:last-child{border-bottom:0}
 .brain-list li::before{content:"\2713";position:absolute;left:0;color:var(--gold-lt);font-weight:700}
 .brain-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:44px;align-items:center}
-.brain-img img{width:100%;border-radius:12px;display:block}
+.brain-img img{width:100%;border-radius:12px;display:block;box-shadow:0 0 46px rgba(233,191,99,.20),0 0 0 1px rgba(233,191,99,.30)}
 @media(max-width:900px){.brain-box{padding:32px 26px}.brain-grid{grid-template-columns:1fr;gap:28px}.brain-img{order:-1}.brain-img img{max-width:360px;margin:0 auto}}
 
 /* ---------- FERRAMENTAS ---------- */
