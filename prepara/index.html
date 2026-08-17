@@ -101,9 +101,9 @@
     <section class="painel" id="controles">
       <h2>Controles</h2>
 
-      <label class="rotulo-campo" for="nomes">Nomes a substituir (um por linha):</label>
-      <textarea id="nomes" placeholder="João Pereira da Silva Almeida&#10;Maria Souza = CLIENTE"></textarea>
-      <p class="dica">Acentos e maiúsculas não importam. Use <code>Nome = RÓTULO</code> para escolher o rótulo.</p>
+      <label class="rotulo-campo" for="nomes">Localizar e substituir (uma por linha):</label>
+      <textarea id="nomes" placeholder="Brito &amp; Garcia = ESCRITÓRIO&#10;Condomínio Residencial José Pedrossian = CONDOMÍNIO&#10;Rua Julia Maksoud, 593 = ENDEREÇO"></textarea>
+      <p class="dica">Cole qualquer trecho que queira ocultar, como no Localizar/Substituir do Word. Use <code>texto = RÓTULO</code>. Acentos, maiúsculas e espaços quebrados pelo PDF não impedem a busca.</p>
 
       <div id="detectores"></div>
 
@@ -148,19 +148,19 @@ function escapeRegExp(s) {
 
 const DETECTORES = [
   { id: 'processo', nome: 'Processo', rotulo: '[Nº PROCESSO]', ativo: true,
-    re: /\b\d{7}-?\d{2}\.?\d{4}\.?\d\.?\d{2}\.?\d{4}\b/g },
+    re: /\b\d{7}\s*-?\s*\d{2}\s*\.?\s*\d{4}\s*\.?\s*\d\s*\.?\s*\d{2}\s*\.?\s*\d{4}\b/g },
 
   { id: 'cnpj', nome: 'CNPJ', rotulo: '[CNPJ]', ativo: true,
-    re: /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/g },
+    re: /\b\d{2}\s*\.?\s*\d{3}\s*\.?\s*\d{3}\s*\/?\s*\d{4}\s*-?\s*\d{2}\b/g },
 
   { id: 'cpf', nome: 'CPF', rotulo: '[CPF]', ativo: true,
-    re: /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g },
+    re: /\b\d{3}\s*\.?\s*\d{3}\s*\.?\s*\d{3}\s*-?\s*\d{2}\b/g },
 
   { id: 'oab', nome: 'OAB', rotulo: '[OAB]', ativo: true,
     re: /\bOAB[\/\s]?[A-Z]{2}[\s\-n°º.]*\d{1,6}\b/gi },
 
   { id: 'cep', nome: 'CEP', rotulo: '[CEP]', ativo: true,
-    re: /\b\d{5}-\d{3}\b/g },
+    re: /\b\d{5}(?:-|\s+)\d{3}\b/g },
 
   { id: 'telefone', nome: 'Telefone', rotulo: '[TELEFONE]', ativo: true,
     re: /\(?\b\d{2}\)?[\s-]?9?\d{4}[-\s]?\d{4}\b/g },
@@ -178,37 +178,26 @@ const MAPA_ACENTOS = {
 };
 const LETRAS = 'A-Za-zÀ-ÖØ-öø-ÿ';
 
-// Regex case-insensitive e acento-insensitive para um termo livre
+// Regex case-insensitive e acento-insensitive para localizar texto livre.
+// Espaços viram \s*: PDFs frequentemente quebram ou eliminam os espaços visuais.
 function regexFlexivel(termo) {
   const norm = semAcento(termo).toLowerCase();
   const corpo = norm.split('').map(ch => {
-    if (ch === ' ') return '\\s+';
+    if (/\s/.test(ch)) return '\\s*';
     return MAPA_ACENTOS[ch] || escapeRegExp(ch);
   }).join('');
   return new RegExp('(?<![' + LETRAS + '])' + corpo + '(?![' + LETRAS + '])', 'gi');
 }
 
-// Lê o textarea: uma linha = um nome; "Nome = RÓTULO" define o rótulo
+// Uma linha = localizar; "texto = RÓTULO" escolhe o que aparece no lugar.
+// Não divide nomes em sobrenomes: é localizar/substituir previsível, como no Word.
 function analisarNomes(entrada) {
   return entrada.split('\n').map(l => l.trim()).filter(Boolean).map((linha, i) => {
-    const partes = linha.split('=');
-    const nome = partes[0].trim();
-    const rotulo = partes[1] && partes[1].trim()
-      ? '[' + partes[1].trim().toUpperCase() + ']'
-      : '[NOME ' + (i + 1) + ']';
-    const normRotulo = semAcento(rotulo).toLowerCase();
-    const variantes = [nome]
-      .concat(nome.split(/\s+/).filter(p => semAcento(p).length >= 4))
-      .map(v => v.trim()).filter(Boolean)
-      .filter(v => !normRotulo.includes(semAcento(v).toLowerCase()));
-    const unicas = [];
-    const vistos = new Set();
-    for (const v of variantes) {
-      const k = semAcento(v).toLowerCase();
-      if (!vistos.has(k)) { vistos.add(k); unicas.push(v); }
-    }
-    unicas.sort((a, b) => b.length - a.length);
-    return { nome, rotulo, variantes: unicas };
+    const pos = linha.indexOf('=');
+    const termo = (pos >= 0 ? linha.slice(0, pos) : linha).trim();
+    const nomeRotulo = pos >= 0 ? linha.slice(pos + 1).trim() : '';
+    const rotulo = nomeRotulo ? '[' + nomeRotulo.toUpperCase() + ']' : '[DADO ' + (i + 1) + ']';
+    return { nome: termo, rotulo, variantes: termo ? [termo] : [] };
   });
 }
 
@@ -278,7 +267,25 @@ function linhasDaPagina(items) {
   }
   for (const l of linhas) {
     l.items.sort((a, b) => a.x - b.x);
-    l.texto = l.items.map(i => i.str).join('').replace(/\s+/g, ' ').trim();
+    const visiveis = [];
+    for (const it of l.items) {
+      const anterior = visiveis[visiveis.length - 1];
+      // Alguns PDFs desenham a mesma palavra várias vezes no mesmo ponto.
+      if (anterior && it.str === anterior.str && Math.abs(it.x - anterior.x) < 2) continue;
+      visiveis.push(it);
+    }
+    let texto = '';
+    let anterior = null;
+    for (const it of visiveis) {
+      if (anterior) {
+        const fimAnterior = anterior.x + (anterior.w || 0);
+        const espacoMinimo = Math.max(1.5, (anterior.h || 12) * 0.12);
+        if (it.x - fimAnterior > espacoMinimo && !/^[-,.;:!?)]/.test(it.str) && !/\s$/.test(texto)) texto += ' ';
+      }
+      texto += it.str;
+      anterior = it;
+    }
+    l.texto = texto.replace(/\s+/g, ' ').trim();
     l.h = Math.max.apply(null, l.items.map(i => i.h));
   }
   return linhas.filter(l => l.texto);
@@ -420,7 +427,7 @@ async function processarArquivo(file) {
       for (const it of content.items) {
         if (!it.str || !it.str.trim()) continue;
         const h = it.height || Math.abs(it.transform[3]) || 0;
-        items.push({ str: it.str, h: h, x: it.transform[4], y: it.transform[5] });
+        items.push({ str: it.str, h: h, x: it.transform[4], y: it.transform[5], w: it.width || 0 });
         totalChars += it.str.length;
       }
       paginas.push(items);
