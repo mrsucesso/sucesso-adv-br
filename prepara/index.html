@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prepara PDF para IA — Agência do Sucesso</title>
+<meta name="description" content="Converta PDFs jurídicos em texto limpo e substitua dados identificáveis antes de usar com IA. Gratuito e 100% no seu navegador — seu documento não sai do seu computador.">
+<style>
+  :root { --acento: #0E7490; --borda: #cbd5e1; --fundo: #f8fafc; --texto: #1e293b; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 24px 16px 48px;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--fundo); color: var(--texto); line-height: 1.5;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 1.6rem; margin: 0 0 4px; color: #0f172a; }
+  .sub { margin: 0 0 16px; color: #475569; }
+  .selo {
+    background: #ecfeff; border: 1px solid var(--acento); border-radius: 8px;
+    padding: 12px 16px; margin-bottom: 20px; font-size: 0.95rem;
+  }
+  .selo strong { color: var(--acento); }
+  .selo em { color: #475569; }
+  #dropzone {
+    border: 2px dashed var(--acento); border-radius: 8px; background: #fff;
+    padding: 32px 16px; text-align: center; cursor: pointer; margin-bottom: 20px;
+    font-size: 1rem; color: #334155;
+  }
+  #dropzone.arrastando { background: #ecfeff; }
+  #dropzone .escolher { color: var(--acento); font-weight: 600; text-decoration: underline; }
+  #status { margin: -12px 0 16px; font-size: 0.9rem; color: #475569; min-height: 1.2em; }
+  main { display: grid; grid-template-columns: 340px 1fr; gap: 20px; align-items: start; }
+  .painel {
+    background: #fff; border: 1px solid var(--borda); border-radius: 8px; padding: 16px;
+  }
+  .painel h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: #64748b; margin: 0 0 12px; }
+  label.rotulo-campo { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 6px; }
+  #nomes {
+    width: 100%; min-height: 96px; resize: vertical; font: inherit; font-size: 0.9rem;
+    border: 1px solid var(--borda); border-radius: 6px; padding: 8px;
+  }
+  .dica { font-size: 0.8rem; color: #64748b; margin: 6px 0 14px; }
+  .detector { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 0.95rem; }
+  .detector input { accent-color: var(--acento); width: 16px; height: 16px; }
+  .detector .cont { color: #64748b; font-size: 0.85rem; }
+  .aviso-resp {
+    background: #fffbeb; border: 1px solid #f59e0b; border-radius: 8px;
+    padding: 10px 14px; font-size: 0.85rem; margin: 16px 0 12px;
+  }
+  .botoes { display: flex; gap: 10px; }
+  button {
+    font: inherit; font-weight: 600; border-radius: 6px; padding: 10px 18px; cursor: pointer;
+    border: 1px solid var(--acento);
+  }
+  button.primario { background: var(--acento); color: #fff; }
+  button.secundario { background: #fff; color: var(--acento); }
+  button:disabled { opacity: 0.45; cursor: not-allowed; }
+  #preview {
+    font-family: ui-monospace, "Cascadia Mono", Consolas, monospace; font-size: 14px;
+    white-space: pre-wrap; word-break: break-word;
+    background: #fff; border: 1px solid var(--borda); border-radius: 8px;
+    padding: 16px; max-height: 70vh; overflow: auto; min-height: 320px; margin: 0;
+  }
+  #preview mark { background: #fef08a; padding: 0 1px; border-radius: 2px; }
+  #aviso-escaneado {
+    display: none; background: #fef2f2; border: 1px solid #ef4444; border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 16px; font-size: 0.95rem;
+  }
+  footer { margin-top: 32px; font-size: 0.85rem; color: #64748b; text-align: center; }
+  @media (max-width: 820px) {
+    main { grid-template-columns: 1fr; }
+    #preview { max-height: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>Prepara PDF para IA</h1>
+  <p class="sub">Converte seu PDF em texto limpo e substitui dados identificáveis por rótulos.</p>
+
+  <div class="selo">
+    🔒 <strong>Seu documento não sai do seu computador.</strong><br>
+    Todo o processamento acontece no seu navegador. Nada é enviado para nenhum servidor — nem para o meu.<br>
+    <em>Quer confirmar? Desligue a internet e use normalmente.</em>
+  </div>
+
+  <div id="dropzone">
+    Arraste seu PDF aqui ou <span class="escolher">clique para escolher</span>
+    <input type="file" id="arquivo" accept="application/pdf,.pdf" hidden>
+  </div>
+  <div id="status"></div>
+
+  <div id="aviso-escaneado">
+    ⚠️ <strong>Este PDF parece ser digitalizado (imagem).</strong><br>
+    Esta versão lê apenas PDFs com texto. Para documentos escaneados, tire uma foto da página e envie direto para a IA — ela consegue ler imagens.
+  </div>
+
+  <main>
+    <section class="painel" id="controles">
+      <h2>Controles</h2>
+
+      <label class="rotulo-campo" for="nomes">Nomes a substituir (um por linha):</label>
+      <textarea id="nomes" placeholder="João Pereira da Silva Almeida&#10;Maria Souza = CLIENTE"></textarea>
+      <p class="dica">Acentos e maiúsculas não importam. Use <code>Nome = RÓTULO</code> para escolher o rótulo.</p>
+
+      <div id="detectores"></div>
+
+      <div class="aviso-resp">
+        ⚠️ <strong>Revise antes de usar.</strong><br>
+        Esta ferramenta encontra padrões conhecidos — CPF, CNPJ, número de processo, OAB, telefone, e-mail. Ela <strong>não substitui a sua leitura</strong>. Confira o resultado antes de enviar para qualquer lugar.
+      </div>
+
+      <div class="botoes">
+        <button class="primario" id="copiar" disabled>Copiar</button>
+        <button class="secundario" id="baixar" disabled>Baixar .md</button>
+      </div>
+    </section>
+
+    <section id="resultado">
+      <pre id="preview">O resultado aparece aqui depois que você escolher o PDF.</pre>
+    </section>
+  </main>
+
+  <footer>
+    Ferramenta gratuita da Agência do Sucesso · Mauricio Ruiz<br>
+    Feita para a oficina <em>IA Aplicada à Advocacia, Gestão e Negócios</em>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+'use strict';
+
+/*NUCLEO-INICIO*/
+// ============================================================
+// Núcleo puro — sem DOM. Também é extraído e testado em node.
+// ============================================================
+
+function semAcento(s) {
+  return s.normalize('NFD').replace(/[̀-ͯ]/g, '');
+}
+
+function escapeRegExp(s) {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+const DETECTORES = [
+  { id: 'processo', nome: 'Processo', rotulo: '[Nº PROCESSO]', ativo: true,
+    re: /\b\d{7}-?\d{2}\.?\d{4}\.?\d\.?\d{2}\.?\d{4}\b/g },
+
+  { id: 'cnpj', nome: 'CNPJ', rotulo: '[CNPJ]', ativo: true,
+    re: /\b\d{2}\.?\d{3}\.?\d{3}\/?\d{4}-?\d{2}\b/g },
+
+  { id: 'cpf', nome: 'CPF', rotulo: '[CPF]', ativo: true,
+    re: /\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b/g },
+
+  { id: 'oab', nome: 'OAB', rotulo: '[OAB]', ativo: true,
+    re: /\bOAB[\/\s]?[A-Z]{2}[\s\-n°º.]*\d{1,6}\b/gi },
+
+  { id: 'cep', nome: 'CEP', rotulo: '[CEP]', ativo: true,
+    re: /\b\d{5}-\d{3}\b/g },
+
+  { id: 'telefone', nome: 'Telefone', rotulo: '[TELEFONE]', ativo: true,
+    re: /\(?\b\d{2}\)?[\s-]?9?\d{4}[-\s]?\d{4}\b/g },
+
+  { id: 'email', nome: 'E-mail', rotulo: '[E-MAIL]', ativo: true,
+    re: /\b[\w.+-]+@[\w-]+\.[\w.-]+\b/g },
+];
+
+// Ordem de exibição nos controles (a aplicação segue a ordem de DETECTORES)
+const ORDEM_EXIBICAO = ['cpf', 'cnpj', 'processo', 'oab', 'telefone', 'email', 'cep'];
+
+const MAPA_ACENTOS = {
+  a: '[aàáâãä]', e: '[eèéêë]', i: '[iìíîï]', o: '[oòóôõö]', u: '[uùúûü]',
+  c: '[cç]', n: '[nñ]'
+};
+const LETRAS = 'A-Za-zÀ-ÖØ-öø-ÿ';
+
+// Regex case-insensitive e acento-insensitive para um termo livre
+function regexFlexivel(termo) {
+  const norm = semAcento(termo).toLowerCase();
+  const corpo = norm.split('').map(ch => {
+    if (ch === ' ') return '\\s+';
+    return MAPA_ACENTOS[ch] || escapeRegExp(ch);
+  }).join('');
+  return new RegExp('(?<![' + LETRAS + '])' + corpo + '(?![' + LETRAS + '])', 'gi');
+}
+
+// Lê o textarea: uma linha = um nome; "Nome = RÓTULO" define o rótulo
+function analisarNomes(entrada) {
+  return entrada.split('\n').map(l => l.trim()).filter(Boolean).map((linha, i) => {
+    const partes = linha.split('=');
+    const nome = partes[0].trim();
+    const rotulo = partes[1] && partes[1].trim()
+      ? '[' + partes[1].trim().toUpperCase() + ']'
+      : '[NOME ' + (i + 1) + ']';
+    const normRotulo = semAcento(rotulo).toLowerCase();
+    const variantes = [nome]
+      .concat(nome.split(/\s+/).filter(p => semAcento(p).length >= 4))
+      .map(v => v.trim()).filter(Boolean)
+      .filter(v => !normRotulo.includes(semAcento(v).toLowerCase()));
+    const unicas = [];
+    const vistos = new Set();
+    for (const v of variantes) {
+      const k = semAcento(v).toLowerCase();
+      if (!vistos.has(k)) { vistos.add(k); unicas.push(v); }
+    }
+    unicas.sort((a, b) => b.length - a.length);
+    return { nome, rotulo, variantes: unicas };
+  });
+}
+
+// Substitui na ordem: detectores (específico → genérico) com tokens
+// temporários, depois nomes informados pelo usuário.
+function aplicarSubstituicoes(texto, ativos, nomesInfo) {
+  let t = texto;
+  const contadores = {};
+  const tokens = [];
+  let seq = 0;
+
+  for (const d of DETECTORES) {
+    let n = 0;
+    if (ativos[d.id]) {
+      d.re.lastIndex = 0;
+      t = t.replace(d.re, () => {
+        n++;
+        const tok = '§§T' + (++seq) + '§§';
+        tokens.push([tok, d.rotulo]);
+        return tok;
+      });
+    }
+    contadores[d.id] = n;
+  }
+  for (const [tok, rot] of tokens) t = t.split(tok).join(rot);
+
+  const rotulosUsados = new Set();
+  for (const d of DETECTORES) if (contadores[d.id] > 0) rotulosUsados.add(d.rotulo);
+
+  let totalNomes = 0;
+  for (const info of nomesInfo) {
+    let encontrou = false;
+    for (const v of info.variantes) {
+      const re = regexFlexivel(v);
+      t = t.replace(re, () => { totalNomes++; encontrou = true; return info.rotulo; });
+    }
+    if (encontrou) rotulosUsados.add(info.rotulo);
+  }
+
+  return { texto: t, contadores, totalNomes, rotulosUsados: Array.from(rotulosUsados) };
+}
+
+// ---------- Extração: itens do PDF.js → Markdown ----------
+
+function medianaDe(nums) {
+  if (!nums.length) return 0;
+  const s = [...nums].sort((a, b) => a - b);
+  const m = Math.floor(s.length / 2);
+  return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+}
+
+function chaveRepetida(it) {
+  // dígitos normalizados: "fls. 1" e "fls. 2" compartilham a mesma chave
+  return Math.round(it.y / 4) + '|' + semAcento(it.str.trim().toLowerCase()).replace(/\d+/g, '#');
+}
+
+function linhasDaPagina(items) {
+  const ordenados = [...items].sort((a, b) => b.y - a.y || a.x - b.x);
+  const linhas = [];
+  for (const it of ordenados) {
+    const l = linhas[linhas.length - 1];
+    if (l && Math.abs(l.y - it.y) < 2) {
+      l.items.push(it);
+    } else {
+      linhas.push({ y: it.y, items: [it] });
+    }
+  }
+  for (const l of linhas) {
+    l.items.sort((a, b) => a.x - b.x);
+    l.texto = l.items.map(i => i.str).join('').replace(/\s+/g, ' ').trim();
+    l.h = Math.max.apply(null, l.items.map(i => i.h));
+  }
+  return linhas.filter(l => l.texto);
+}
+
+function classificarLinha(linha, mediana) {
+  const t = linha.texto;
+  if (linha.h >= mediana * 1.5) return '## ' + t;
+  if (linha.h >= mediana * 1.2) return '### ' + t;
+  if (t.length <= 80 && /[A-ZÀ-Ú]/.test(t) && semAcento(t) === semAcento(t).toUpperCase()) return '## ' + t;
+  return null;
+}
+
+function juntarLinha(buffer, texto) {
+  if (!buffer) return texto;
+  if (/[a-zà-ú]-$/.test(buffer) && /^[a-zà-ú]/.test(texto)) return buffer.slice(0, -1) + texto;
+  return buffer + ' ' + texto;
+}
+
+// paginas: array de arrays de itens { str, h, x, y }
+function construirMarkdown(paginas) {
+  const numPages = paginas.length;
+  const alturas = [];
+  paginas.forEach(items => items.forEach(i => { if (i.h > 0) alturas.push(i.h); }));
+  const med = medianaDe(alturas) || 12;
+
+  // Cabeçalho/rodapé repetido: mesma string na mesma faixa de Y em 70%+ das páginas
+  const excluir = new Set();
+  if (numPages >= 3) {
+    const contagem = new Map();
+    paginas.forEach(items => {
+      const vistos = new Set();
+      items.forEach(it => {
+        const k = chaveRepetida(it);
+        if (!vistos.has(k)) { vistos.add(k); contagem.set(k, (contagem.get(k) || 0) + 1); }
+      });
+    });
+    const limiar = Math.ceil(numPages * 0.7);
+    contagem.forEach((c, k) => { if (c >= limiar) excluir.add(k); });
+  }
+
+  let md = '';
+  paginas.forEach((items, pi) => {
+    const filtrados = items.filter(it => !excluir.has(chaveRepetida(it)));
+    const linhas = linhasDaPagina(filtrados);
+    let paragrafo = '';
+    let prevY = null;
+    const flush = () => { if (paragrafo) { md += paragrafo + '\n\n'; paragrafo = ''; } };
+
+    for (const l of linhas) {
+      const titulo = classificarLinha(l, med);
+      const quebra = prevY !== null && (prevY - l.y) > med * 1.6;
+      if (titulo) {
+        flush();
+        md += titulo + '\n\n';
+      } else {
+        if (quebra) flush();
+        paragrafo = juntarLinha(paragrafo, l.texto);
+      }
+      prevY = l.y;
+    }
+    flush();
+
+    if (pi < numPages - 1) md += '---\n*— página ' + (pi + 1) + ' —*\n\n';
+  });
+
+  return md.replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+}
+/*NUCLEO-FIM*/
+
+// ============================================================
+// Cola com a página (DOM)
+// ============================================================
+
+if (typeof pdfjsLib !== 'undefined') {
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+const $ = id => document.getElementById(id);
+const dropzone = $('dropzone'), arquivoInput = $('arquivo'), statusEl = $('status'),
+      nomesEl = $('nomes'), previewEl = $('preview'), copiarBtn = $('copiar'),
+      baixarBtn = $('baixar'), avisoEscaneado = $('aviso-escaneado'),
+      detectoresEl = $('detectores');
+
+const ativos = {};
+const contadoresEl = {};
+let markdownOriginal = '';
+let markdownFinal = '';
+let nomeArquivo = '';
+
+// Monta checkboxes na ordem de exibição
+for (const id of ORDEM_EXIBICAO) {
+  const d = DETECTORES.find(x => x.id === id);
+  ativos[d.id] = d.ativo;
+  const label = document.createElement('label');
+  label.className = 'detector';
+  const cb = document.createElement('input');
+  cb.type = 'checkbox';
+  cb.checked = d.ativo;
+  cb.addEventListener('change', () => { ativos[d.id] = cb.checked; atualizar(); });
+  const span = document.createElement('span');
+  span.textContent = d.nome + ' ';
+  const cont = document.createElement('span');
+  cont.className = 'cont';
+  cont.textContent = '(0)';
+  contadoresEl[d.id] = cont;
+  label.appendChild(cb);
+  label.appendChild(span);
+  label.appendChild(cont);
+  detectoresEl.appendChild(label);
+}
+
+async function processarArquivo(file) {
+  if (!file) return;
+  if (!/\.pdf$/i.test(file.name) && file.type !== 'application/pdf') {
+    statusEl.textContent = 'Escolha um arquivo PDF.';
+    return;
+  }
+  if (typeof pdfjsLib === 'undefined') {
+    statusEl.textContent = 'Não foi possível carregar o leitor de PDF. Verifique a internet e recarregue a página.';
+    return;
+  }
+  avisoEscaneado.style.display = 'none';
+  nomeArquivo = file.name;
+  statusEl.textContent = 'Lendo ' + file.name + '…';
+  copiarBtn.disabled = baixarBtn.disabled = true;
+
+  try {
+    const buf = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+    const paginas = [];
+    let totalChars = 0;
+    for (let p = 1; p <= pdf.numPages; p++) {
+      statusEl.textContent = 'Processando página ' + p + ' de ' + pdf.numPages + '…';
+      const page = await pdf.getPage(p);
+      const content = await page.getTextContent();
+      const items = [];
+      for (const it of content.items) {
+        if (!it.str || !it.str.trim()) continue;
+        const h = it.height || Math.abs(it.transform[3]) || 0;
+        items.push({ str: it.str, h: h, x: it.transform[4], y: it.transform[5] });
+        totalChars += it.str.length;
+      }
+      paginas.push(items);
+    }
+
+    if (totalChars < 100 * pdf.numPages) {
+      markdownOriginal = '';
+      previewEl.textContent = 'O resultado aparece aqui depois que você escolher o PDF.';
+      avisoEscaneado.style.display = 'block';
+      statusEl.textContent = file.name + ' · ' + pdf.numPages + ' páginas';
+      return;
+    }
+
+    markdownOriginal = construirMarkdown(paginas);
+    statusEl.textContent = file.name + ' · ' + pdf.numPages + ' páginas · pronto';
+    atualizar();
+  } catch (e) {
+    statusEl.textContent = 'Não consegui ler este PDF. Ele pode estar protegido por senha ou corrompido.';
+  }
+}
+
+function destacar(texto, rotulos) {
+  const escapado = texto
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  let html = escapado;
+  for (const rot of rotulos) {
+    html = html.split(rot).join('<mark>' + rot + '</mark>');
+  }
+  return html;
+}
+
+let debounce = null;
+function atualizar() {
+  if (!markdownOriginal) {
+    for (const id in contadoresEl) contadoresEl[id].textContent = '(0)';
+    return;
+  }
+  const nomesInfo = analisarNomes(nomesEl.value);
+  const res = aplicarSubstituicoes(markdownOriginal, ativos, nomesInfo);
+  markdownFinal = res.texto;
+  for (const d of DETECTORES) contadoresEl[d.id].textContent = '(' + res.contadores[d.id] + ')';
+  previewEl.innerHTML = destacar(res.texto, res.rotulosUsados);
+  copiarBtn.disabled = baixarBtn.disabled = false;
+}
+
+function agendarAtualizacao() {
+  clearTimeout(debounce);
+  debounce = setTimeout(atualizar, 150);
+}
+
+nomesEl.addEventListener('input', agendarAtualizacao);
+
+dropzone.addEventListener('click', () => arquivoInput.click());
+arquivoInput.addEventListener('change', () => processarArquivo(arquivoInput.files[0]));
+
+['dragenter', 'dragover'].forEach(ev => dropzone.addEventListener(ev, e => {
+  e.preventDefault();
+  dropzone.classList.add('arrastando');
+}));
+['dragleave', 'drop'].forEach(ev => dropzone.addEventListener(ev, e => {
+  e.preventDefault();
+  dropzone.classList.remove('arrastando');
+}));
+dropzone.addEventListener('drop', e => {
+  const f = e.dataTransfer.files && e.dataTransfer.files[0];
+  processarArquivo(f);
+});
+
+copiarBtn.addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText(markdownFinal);
+    copiarBtn.textContent = 'Copiado ✓';
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = markdownFinal;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    copiarBtn.textContent = 'Copiado ✓';
+  }
+  setTimeout(() => { copiarBtn.textContent = 'Copiar'; }, 1600);
+});
+
+baixarBtn.addEventListener('click', () => {
+  const base = (nomeArquivo || 'documento').replace(/\.pdf$/i, '');
+  const blob = new Blob([markdownFinal], { type: 'text/markdown;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = base + '-limpo.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+</script>
+</body>
+</html>
